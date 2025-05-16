@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Track Complaints</title>
+    <link rel="stylesheet" href="../static/styles/track_complaints.css">
+</head>
+
+<body>
+
+    <div class="grievance-form-container">
+        <header class="header-wrapper">
+            <div class="logo-container">
+                <img loading="lazy"
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a1f340de38454f63005e3dace9973a729f9f08aeab985a9d35b0edf20ed8e4b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                    class="logo-image" alt="Primary logo" />
+                <img loading="lazy"
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/68f9ba49f4952ad69c570d1f832dab224108b4ff93d1f93caf0f657c1e4e82f2?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                    class="secondary-logo" alt="Secondary logo" />
+            </div>
+            <div class="user-info-container">
+                <div class="language-user-wrapper">
+                    <div class="language-selector">
+                        <span class="language-text">English</span>
+                        <img loading="lazy"
+                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/af624e064cb55ab1cdf69bbe6422929a63a513da78f61a4624eaee1407fbde44?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                            class="language-icon" alt="Language selector icon" />
+                    </div>
+                    <img loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/7928c972bb6e1037556ab7ab515e0a559e351033285b3b5d48a3a023ce0ed5b3?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                        class="user-icon" alt="User icon" />
+                    <span class="welcome-text">Welcome Username</span>
+                </div>
+                <div class="notification-container">
+                    <img loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/99921d6dd55c3f3fb1416f7f306139ff0a761b5ceb085b59577bbc93faf1e710?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                        class="notification-icon" alt="Notification icon"
+                        
+                        onclick="logout()";
+                        />
+                        
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="content-wrapper">
+                   
+                      <nav class="sidebar" >
+                        <div class="sidebar-menu" >
+                          <ul class="menu-list">
+                            <li class="menu-item-wrapper">
+                              <div class="menu-item-content">
+                                <div class="menu-item-icon-wrapper">
+                                  <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/8839ffa641fed9485b4a3aa77a08aae38d7d6ebe98522e48ed28906a7471be6b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186" alt="Dashboard icon" class="menu-icon" />
+                                </div>
+                                <span class="dashboard">DASHBOARD</span>
+                              </div>
+                            </li>
+                            <li class="menu-item-wrapper">
+                              <div class="menu-item-content">
+                                
+                            </li>
+                            <li class="menu-item-wrapper">
+                              <div class="menu-item-content">
+                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d272c53a86b56b04614b0bd5ed5b2809e569c6de3ff9a63f463187a81e29bab0?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186" alt="Complaints icon" class="menu-item-icon" />
+                                <span class="menu-item-text">TrackComplaints</span>
+                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/aa08ce4c900d467cb31a12a09bf55a6324b166d80e62bf2b5778f9bd5a4d9063?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186" alt="Expand complaints menu" class="menu-item-arrow" />
+                              </div>
+                            </li>
+                           
+                           
+                          </ul>
+                        </div>
+                      </nav>
+                    <!-- </div> -->
+                
+              
+                    <section class="main-form-container">
+                        <!-- <h1 class="form-title">Track Complaints</h1> -->
+                        <!-- <div class="divider"></div> -->
+                        <div class="form-wrapper">
+                            <div class="container mt-5">
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Complaint ID</th>
+                                            <th>Unique ID</th>
+                                            <th>Department</th>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                            <th>PNR Number</th>
+                                            <th>Age</th>
+                                            <th>Additional Info</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for complaint in complaints %}
+                                        <tr>
+                                            <td>{{ complaint.unique_id }}</td>
+                                            <td>{{ complaint.id }}</td>
+                                            <td>{{ complaint.department }}</td>
+                                            <td>{{ complaint.date }}</td>
+                                            <td>{{ complaint.time }}</td>
+                                            <td>{{ complaint.pnr_no }}</td>
+                                            <td>{{ complaint.age }}</td>
+                                            <td>{{ complaint.additional_info }}</td>
+                                            <td>{{ complaint.status }}</td>
+                                            <td>
+                                                {% if complaint.status == 'Completed' and not complaint.feedback %}
+                                                <a href="{{ url_for('submit_feedback', complaint_id=complaint.id) }}"
+                                                    class="btn btn-success">Give Feedback</a>
+                                                {% else %}
+                                                <span class="text-muted">Feedback not available</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary mr-5">Back to
+                                    Dashboard</a>
+                            </div>
+                        </div>
+                    </section>
+                   
+                    </div>
+        </main>
+        <footer class="footer">
+            <p>Copyright© 2024 Rail Sahayak. All Rights Reserved</p>
+           
+        </footer>
+    </div>
+
+    <script>
+        function logout() {
+    // Redirect to the logout route
+    window.location.href = "{{ url_for('logout') }}";
+        }
+    </script>
+
+</body>
+
+</html>
+<!-- <div class="container mt-5">
+        <h2>Track Complaints</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Complaint ID</th>
+                    <th>Unique ID</th>
+                    <th>Department</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>PNR Number</th>
+                    <th>Age</th>
+                    <th>Additional Info</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complaint in complaints %}
+                <tr>
+                    <td>{{ complaint.unique_id }}</td>
+                    <td>{{ complaint.id }}</td>
+                    <td>{{ complaint.department }}</td>
+                    <td>{{ complaint.date }}</td>
+                    <td>{{ complaint.time }}</td>
+                    <td>{{ complaint.pnr_no }}</td>
+                    <td>{{ complaint.age }}</td>
+                    <td>{{ complaint.additional_info }}</td>
+                    <td>{{ complaint.status }}</td>
+                    <td>
+                        {% if complaint.status == 'Completed' and not complaint.feedback %}
+                        <a href="{{ url_for('submit_feedback', complaint_id=complaint.id) }}" class="btn btn-success">Give Feedback</a>
+                        {% else %}
+                        <span class="text-muted">Feedback not available</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary"
+        >Back to Dashboard</a
+        >
+    </div> -->
+<!-- </body> -->
+
+<!-- </html> -->

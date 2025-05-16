@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database View</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">User Database</h1>
+        <table id="userTable" class="table table-bordered table-hover mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ user.department }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h1 class="mt-5">Complaints Database</h1>
+        <table id="complaintTable" class="table table-bordered table-hover mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Unique ID</th>
+                    <th>Department</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>PNR Number</th>
+                    <th>Age</th>
+                    <th>Additional Info</th>
+                    <th>Images</th>
+                    <th>Status</th>
+                    <th>User ID</th>
+                    <th>Assigned Employee ID</th>
+                    <th>urgency</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complaint in complaints %}
+                <tr>
+                    <td>{{ complaint.id }}</td>
+                    <td>{{ complaint.unique_id }}</td>
+                    <td>{{ complaint.department }}</td>
+                    <td>{{ complaint.date }}</td>
+                    <td>{{ complaint.time }}</td>
+                    <td>{{ complaint.pnr_no }}</td>
+                    <td>{{ complaint.age }}</td>
+                    <td>{{ complaint.additional_info }}</td>
+                    <td>
+                        {% if complaint.images %}
+                            <a href="{{ url_for('static', filename='uploads/' + complaint.images) }}" target="_blank">View Images</a>
+                        {% else %}
+                            No Images
+                        {% endif %}
+                    </td>
+                    <td>{{ complaint.status }}</td>
+                    <td>{{ complaint.user_id }}</td>
+                    <td>{{ complaint.assigned_employee_id }}</td>
+                    <td>{{ complaint.urgency }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h1 class="mt-5">Feedback Database</h1>
+        <table id="feedbackTable" class="table table-bordered table-hover mt-3">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Complaint ID</th>
+                    <th>Text</th>
+                    <th>Status</th>
+                    <th>sentiment</th>
+                    <th>rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedbacks %}
+                <tr>
+                    <td>{{ feedback.id }}</td>
+                    <td>{{ feedback.complaint.unique_id }}</td>
+                    <td>{{ feedback.feedback_text }}</td>
+                    <td>{{ feedback.status }}</td>
+                    <td>{{ feedback.sentiment }}</td>
+                    <td>{{ feedback.rating }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#userTable').DataTable({
+                responsive: true,
+                pageLength: 5,
+            });
+
+            $('#complaintTable').DataTable({
+                responsive: true,
+                pageLength: 5,
+            });
+        });
+    </script>
+</body>
+</html>

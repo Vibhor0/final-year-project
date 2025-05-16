@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="../static/styles/userdashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg fixed-top " >
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#" data-i18n="dash">User Dashboard</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav" >
+        <ul class="navbar-nav me-auto" style="width: 500px;">
+          <li>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a1f340de38454f63005e3dace9973a729f9f08aeab985a9d35b0edf20ed8e4b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+              class="content-image" alt="" />
+          </li>
+          <li>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/68f9ba49f4952ad69c570d1f832dab224108b4ff93d1f93caf0f657c1e4e82f2?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+              class="content-image" alt="Content image" />
+          </li>
+
+        </ul>
+      </div>
+      <ul class="navbar-nav ms-auto">
+
+        <li>
+          <select id="language-selector" style="margin-top: 0px; padding: 10px;">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="mr">Marathi</option>
+        </select>
+        <li class="nav-item">
+          <!-- <a data-i18n="login" class="nav-link btn text-white mr-10 ml-10" style="background-color: green; margin-left:15px ;" href="{{ url_for('login') }}"
+            >
+            Login
+          </a> -->
+          {% if current_user.is_authenticated %}
+            <span>Welcome, {{ current_user.username }}!</span>
+            <a data-i18n="logout" class="nav-link btn text-white mr-10 ml-10" style="background-color: red; " href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a data-i18n="login" class="nav-link btn text-white mr-10 ml-10" style="background-color: green; margin-left:15px ;" href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+          
+        </li>
+
+      </ul>
+
+    </div>
+  </nav>
+
+
+  <!-- second nav -->
+  <div class="user-info-container">
+    <div class="user-details">
+      <div class="rounded-box">
+        <div class="image-container">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/089bf5fa4273edfecfe94825c1f0e541a04f456586934679ebbf6e332abe7798?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            class="content-image" alt="User avatar">
+        </div>
+        <span class="number">139</span>
+      </div>
+      <p class="security-medical-assistance" data-i18n="security">For Security & Medical Assistance</p>
+      <div class="filecomplaint">
+        
+        <a class="nav-link anchor" href="{{ url_for('complaint') }}" style="margin-top: 10px;">
+          <!-- <span><i class="fa-solid fa-circle-exclamation"></i></span> -->
+          <span class="register" data-i18n="register" style="padding-left: 10px;">Register Grievance</span></a>
+
+       
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+  <!-- <-- carousel-->
+  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="8000">
+    <div class="carousel-inner">
+
+      <div class="carousel-item ">
+        <img class="d-block w-100"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/1e1637705d946cef76eff490ff4f0c5d44f92c2f7b0fdb2a59e7dda9d516f478?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+          class="responsive-image" alt="Description of the image" alt="First slide">
+          
+      </div>
+     <div class="carousel-item active">
+        <img class="d-block w-100"
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/cada8f8fd9a04bf32bcb8dd69594aeebcfb5347750855a29b2e023caaaa076e8?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+          class="responsive-image" alt="Description of the image" alt="Third slide">
+          <h1 class="rail-sahayak-title" data-i18n="title">Rail SAHAYAK</h1>
+        
+      </div>
+      <div class="carousel-item special">
+        <main class="main-container c2">
+          <section class="img1">
+            <img   src="https://cdn.builder.io/api/v1/image/assets/TEMP/62d66a2dc3af1a8244e7c7ad4090c36259fa264fd64b1d1ea696d172ec7a0154?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186" class="yellow-img" alt="Profile image">
+          </section>
+          
+          <section class="rail-sahayak-section">
+            <h1 class="rail-sahayak-title" data-i18n="title">  Rail SAHAYAK</h1>
+          </section>
+          
+          <section  class="img1" >
+            <img   src="https://cdn.builder.io/api/v1/image/assets/TEMP/fdb2c59bc1d0b1dc738725885aa9c7ff00961278c66128e9150d8242e0c82f74?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186" class="yellow-img" alt="Profile image">
+          </section>
+        </main>
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+
+
+
+
+
+
+
+
+  <div class="yellowcontainer">
+    <!-- Ask Sakhi Button -->
+    <div class="parent-container" onclick="redirectToChatbot()">
+
+
+   
+      <div class="ask-sakhi-container" id="ask-sakhi">
+        <div class="ask-sakhi-circle">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/a33db51d2165dec1ea9e110ff6dce4a158801a94aff8d551aa234b52c4c31318?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="Ask Sakhi avatar" class="ask-sakhi-image">
+          <p class="ask-sakhi-text" data-i18n="sakhi" >Ask Sakhi</p>
+          <!-- <p class="ask-sakhi-text" data-i18n="journey">Your Journey Companion</p> -->
+        </div>
+      </div>
+    </div>
+   
+   
+
+    <div class="container">
+      <div class="services-grid">
+        <a href="#train-enquiry" class="service-item services-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/14f15a731a1548f5b549ae7522525fb88fd77ade2f35be0ea958b661e1284216?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="Train Enquiry icon" class="service-icon">
+          <span data-i18n="tra">Train Enquiry</span>
+        </a>
+        <a href="#reservation-enquiry" class="service-item services-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/417b363bf1e4157fad322aaf967c6c55ac9a0289030b7760b8820d3603f88784?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="Reservation Enquiry icon" class="service-icon">
+          <span data-i18n="res">Reservation Enquiry</span>
+        </a>
+        <a href="#uts-ticketing" class="service-item services-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/14f15a731a1548f5b549ae7522525fb88fd77ade2f35be0ea958b661e1284216?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="UTS Ticketing icon" class="service-icon">
+          <span data-i18n="uts">UTS Ticketing</span>
+        </a>
+        <a href="#uts-ticketing" class="service-item services-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/14f15a731a1548f5b549ae7522525fb88fd77ade2f35be0ea958b661e1284216?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="UTS Ticketing icon" class="service-icon">
+          <span data-i18n="uts">UTS Ticketing</span>
+        </a>
+        <a href="#uts-ticketing" class="service-item services-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/14f15a731a1548f5b549ae7522525fb88fd77ade2f35be0ea958b661e1284216?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="UTS Ticketing icon" class="service-icon">
+          <span data-i18n="uts">UTS Ticketing</span>
+        </a>
+
+        <a href="#ticket-booking" class="service-item services-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/14f15a731a1548f5b549ae7522525fb88fd77ade2f35be0ea958b661e1284216?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="Railway Parcel Website icon" class="service-icon">
+
+          <span data-i18n="tick">Ticket Booking</span>
+        </a>
+        <a href="#railway-parcel" class="service-item services-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/14f15a731a1548f5b549ae7522525fb88fd77ade2f35be0ea958b661e1284216?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="Railway Parcel Website icon" class="service-icon">
+          <span data-i18n="par">Railway Parcel Website</span>
+        </a>
+        <a href="#freight-business" class="service-item services-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/417b363bf1e4157fad322aaf967c6c55ac9a0289030b7760b8820d3603f88784?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="Freight Business icon" class="service-icon">
+          <span data-i18n="fre">Freight Business</span>
+        </a>
+        <a href="#retiring-room" class="service-item services-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/5512ce1a4781414a0081e8247a41eb7f459f911f17db7ba03ee19a16518e9ba1?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="Retiring Room Booking icon" class="service-icon">
+          <span data-i18n="ret">Retiring Room Booking</span>
+        </a>
+        <a href="#indian-railways" class="service-item services-text">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/417b363bf1e4157fad322aaf967c6c55ac9a0289030b7760b8820d3603f88784?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            alt="Indian Railways icon" class="service-icon">
+          <span data-i18n="ind">Indian Railways</span>
+        </a>
+      </div>
+
+
+    </div>
+  </div>
+  </div>
+
+  
+  <div>
+
+    <footer class="footer">
+      <p>Copyright© 2024 Rail Sahayak. All Rights Reserved</p>
+      <nav>
+          <a href="#home">Home</a> |
+          <a href="#faqs">FAQs</a> |
+          <a href="#admin-login">Railway Admin Login</a> |
+          <a href="#mis-login">MIS Report Login</a>
+      </nav>
+    </footer>
+
+  <script>
+
+    document.getElementById("ask-sakhi").addEventListener("click", function () {
+      const chatContainer = document.getElementById("chat-container");
+
+      // Toggle the chat container visibility
+      if (chatContainer.style.display === "none" || chatContainer.style.display === "") {
+        chatContainer.style.display = "block";
+      } else {
+        chatContainer.style.display = "none";
+      }
+    });
+    // logout button toggle 
+    function showLogoutButton() {
+      document.getElementById("logout-button").style.visibility = "visible";
+    }
+
+    function hideLogoutButton() {
+      document.getElementById("logout-button").style.visibility = "hidden";
+    }
+    function logout() {
+      // Redirect to the logout route
+      window.location.href = "{{ url_for('logout') }}";
+    }
+    function redirectToChatbot() {
+        window.location.href = "{{ url_for('chatbot') }}";
+    }
+
+
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/23.0.2/i18next.min.js"></script>
+
+  <script>
+    // Initialize i18next
+    i18next.init({
+        lng: 'en', // Default language
+        resources: {
+            en: {
+                translation: {
+                    "title": "Rail Sahayak",
+                    "dash": "User Dashboard",
+                    "login":"Login",
+                    "security":"For Security & Medical Assistance",
+                    "register":"Register Grievance",
+                    "sakhi":"Ask Sakhi",
+                    "journey":"Your Journey Companion",
+                    "tra":"Train Enquiry",
+                    "res":"Reservation Enquiry",
+                    "uts":"UTS Ticketing",
+                    "tick":"Ticket Booking",
+                    "par":"Railway Parcel Website",
+                    "fre":"Freight Business",
+                    "ind":"Indian Railways",
+                }
+            },
+            hi: {
+                  translation: {
+                    "title": "रेल सहायक",
+                    "dash": "उपयोगकर्ता डैशबोर्ड",
+                    "login": "लॉगिन",
+                    "security": "सुरक्षा और चिकित्सा सहायता के लिए",
+                    "register": "शिकायत दर्ज करें",
+                    "sakhi": "सखी से पूछें",
+                    "journey": "आपकी यात्रा साथी",
+                    "tra": "ट्रेन पूछताछ",
+                    "res": "आरक्षण पूछताछ",
+                    "uts": "यूटीएस टिकटिंग",
+                    "tick": "टिकट बुकिंग",
+                    "par": "रेलवे पार्सल वेबसाइट",
+                    "fre": "माल परिवहन व्यवसाय",
+                    "ind": "भारतीय रेलवे"
+                }
+
+            },
+            mr: {
+                translation: {
+                  "title": "रेल सहाय्यक",
+                  "dash": "वापरकर्ता डॅशबोर्ड",
+                  "login": "लॉगिन",
+                  "security": "सुरक्षा आणि वैद्यकीय मदतीसाठी",
+                  "register": "तक्रार नोंदवा",
+                  "sakhi": "सखीला विचारा",
+                  "journey": "तुमची प्रवास सोबती",
+                  "tra": "रेल्वे चौकशी",
+                  "res": "आरक्षण चौकशी",
+                  "uts": "यूटीएस तिकिटिंग",
+                  "tick": "तिकिट बुकिंग",
+                  "par": "रेल्वे पार्सल वेबसाइट",
+                  "fre": "मालवाहतूक व्यवसाय",
+                  "ind": "भारतीय रेल्वे"
+              }
+
+            }
+        }
+    }, function(err, t) {
+        // Update the text initially
+        updateContent();
+    });
+
+    // Function to update content
+    function updateContent() {
+        document.querySelectorAll("[data-i18n]").forEach(element => {
+            element.textContent = i18next.t(element.getAttribute("data-i18n"));
+        });
+    }
+
+    // Event listener for language change
+    document.getElementById('language-selector').addEventListener('change', function() {
+        i18next.changeLanguage(this.value, updateContent);
+    });
+
+</script>
+
+
+  
+</body>
+
+</html>
+

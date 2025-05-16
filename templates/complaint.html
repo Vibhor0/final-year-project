@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <title>File a Complaint</title>
+    <link rel="stylesheet" href="../static/styles/complaints.css" />
+  </head>
+  <body>
+    <header class="header-wrapper">
+      <div class="logo-container">
+        <img
+          loading="lazy"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a1f340de38454f63005e3dace9973a729f9f08aeab985a9d35b0edf20ed8e4b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+          class="logo-image"
+          alt="Primary logo"
+        />
+        <img
+          loading="lazy"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/68f9ba49f4952ad69c570d1f832dab224108b4ff93d1f93caf0f657c1e4e82f2?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+          class="secondary-logo"
+          alt="Secondary logo"
+        />
+      </div>
+      <div class="user-info-container">
+        <div class="language-user-wrapper">
+          <div class="">
+            <div>
+              <select id="language-selector" style="margin-top: 0px; padding: 10px;">
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="mr">Marathi</option>
+            </select>
+            </div>
+            <div class="nav-item">
+              {% if current_user.is_authenticated %}
+                <span>Welcome, {{ current_user.username }}!</span>
+                <a data-i18n="logout" class="nav-link btn text-white mr-10 ml-10" style="background-color: red; " href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a data-i18n="login" class="nav-link btn text-white mr-10 ml-10" style="background-color: green; margin-left:15px ;" href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+              
+            </div>
+        </div>
+        <div class="notification-container">
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/99921d6dd55c3f3fb1416f7f306139ff0a761b5ceb085b59577bbc93faf1e710?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            class="notification-icon"
+            alt="Notification icon"
+            
+          
+            onclick="logout()"
+            ;
+          />
+          
+        </div>
+      </div>
+    </header>
+
+    <nav class="navigation-bar" style="height: 100px; padding: 0px;" >
+      <div class="nav-items-container" style="margin-top: 10px;">
+        <div class="nav-item" onclick="home()">
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/4d0433d0a3e8283f2d9e8d8357851a162b2d6641b2a5bd1990b8ba2bbe3089ea?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            class="nav-icon"
+            alt="Home icon"
+          />
+          <span class="nav-text">Home</span>
+        </div>
+
+        <div class="nav-item" onclick="trackGrievance()">
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/a24e60d51ee07f132dfbab60e30d56a15c1d526da6f13343ea8a026b0aebb07c?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            class="nav-icon"
+            alt="Track Grievance icon"
+            
+           
+          />
+          <span class="nav-text">Track Grievance</span>
+        </div>
+
+        <div class="nav-item" >
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/c5ca0464e10a7de1c52fa98e80d8426f843c5847fc893d52fa71978a7471a700?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            class="nav-icon"
+            alt="Feedback icon"
+          />
+          <span class="nav-text">Feedback</span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <div class="content-wrapper" style="display: flex; justify-content: center;">
+        <!-- <div class="ask-sakhi-container" id="ask-sakhi" onclick="window.location.href='{}'">
+          <div class="ask-sakhi-circle">
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/a33db51d2165dec1ea9e110ff6dce4a158801a94aff8d551aa234b52c4c31318?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+              alt="Ask Sakhi avatar" class="ask-sakhi-image">
+            <p class="ask-sakhi-text">Ask Sakhi</p>
+            <p class="ask-sakhi-text">Your Journey Companion</p>
+          </div>
+        </div> -->
+        <div class="main-form-container"style="display: flex; justify-content: center;">
+          <h1 class="form-title" style="margin: 0px; display: flex;
+          justify-content: center;">Grievance Detail</h1>
+          <!-- <div class="divider" style="margin: 0px; display: flex; justify-content: center;"></div> -->
+          <div class="form-wrapper">
+            
+            <form method="POST" enctype="multipart/form-data" class="grievance-form" >
+              <div class="form-group">
+                <label for="pnr_no">PNR Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="pnr_no"
+                  name="pnr_no"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="age">Age</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="age"
+                  name="age"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="additional_info">Additional Information</label>
+                <textarea
+                  class="form-control"
+                  id="additional_info"
+                  name="additional_info"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="images">Upload Images</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="images"
+                  name="images"
+                  multiple
+                />
+              </div>
+              <div class="form-actions">
+                <button
+                  type="submit"
+                  class="btn submit-button btn-primary mb-3"
+                >
+                  Submit Complaint
+                </button>
+                <a
+                  href="{{ url_for('user_dashboard') }}"
+                  class="btn btn-secondary"
+                  >Back to Dashboard</a
+                >
+              </div>
+            </form>
+          </div>
+        </div>
+          
+
+
+        
+    
+    
+    </main>
+
+    
+    <script>
+      function showLogoutButton() {
+        document.getElementById("logout-button").style.visibility = "visible";
+      }
+
+      function hideLogoutButton() {
+        document.getElementById("logout-button").style.visibility = "hidden";
+      }
+      function logout() {
+        // Redirect to the logout route
+        window.location.href = "{{ url_for('logout') }}";
+      }
+      function trackGrievance() {
+        // Redirect to the logout route
+        window.location.href="{{ url_for('track_complaints') }}";
+      }
+      function home() {
+        // Redirect to the logout route
+        window.location.href="{{ url_for('user_dashboard') }}";
+      }
+
+
+
+    </script>
+
+    <footer class="footer">
+      <p>Copyright© 2024 Rail Sahayak. All Rights Reserved</p>
+    </footer>
+  </body>
+</html>

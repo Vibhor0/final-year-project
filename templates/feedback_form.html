@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Feedback Form</title>
+    <link rel="stylesheet" href="../static/styles/feedbackform.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Provide Feedback for Complaint #{{ complaint.unique_id }}</h2>
+        <form action="{{ url_for('submit_feedback', complaint_id=complaint.id) }}" method="POST">
+            <div class="form-group">
+                <label for="feedback_text">Your Feedback</label>
+                <textarea class="form-control" id="feedback_text" name="feedback_text" rows="4" required></textarea>
+                <label for="rating">Rating (1-5):</label>
+                <select name="rating">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Register</title>
+    <link rel="stylesheet" href="../static/styles/register.css" />
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-wrapper">
+            <div class="login-content">
+                <div class="login-form-column">
+                    <form class="login-form" method="POST">
+                        <div class="welcome-section">
+                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/9831dd9e21ecb44e4bcae173a008c53e0d7df0a7001a44f6c409f3b048cf9b92?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                                alt="Company logo" class="logo">
+                            <h1 class="welcome-text">WELCOME</h1>
+                        </div>
+                        <label for="username" class="input-label">Username</label>
+                        <input type="text" id="username" name="username" class="input-field" required>
+                        <label for="password" class="input-label">Password</label>
+                        <input type="password" id="password" name="password" class="input-field" required>
+                        <label for="role" class="input-label">Choose your role</label>
+                        <div class="role-select">
+                            <div class="select-wrapper">
+                                <select id="role" name="role" class="select-field" required onchange="toggleDepartmentField()">
+                                    <option value="User">User</option>
+                                    <option value="Admin">Admin</option>
+                                    <option value="Employee">Employee</option>
+                                </select>
+                                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/5c73dc7bed9c8888e2efe87416cffd9726e95454b526dd1f99a4ae7a01423ac0?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                                    alt="" class="select-arrow" aria-hidden="true">
+                            </div>
+                            <div class="form-group" id="departmentGroup" style="display: none;">
+                                <label for="department">Department:</label>
+                                <select class="form-control" id="department" name="department">
+                                    <option value="" disabled selected>Select a department</option>
+                                    <option value="maintenance">Maintenance</option>
+                                    <option value="train operations">Train Operations</option>
+                                    <option value="luggage">Luggage</option>
+                                    <option value="housekeeping">Housekeeping</option>
+                                    <option value="security">Security</option>
+                                    <option value="catering">Catering</option>
+                                    <option value="customer service">Customer Service</option>
+                                    <option value="medical and health">Medical and Health</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <a href="#" class="forgot-password">Forgot Password?</a> -->
+                        <button type="submit" class="register-button">REGISTER</button>
+                        <p class="mt-3">Already have an account? <a href="{{ url_for('login') }}">Login here</a>.</p>
+                    </form>
+                </div>
+
+
+
+            </div>
+
+            <!-- <div class="login-image-column">
+                
+                <div class="login-image" role="img" aria-label="Decorative login image"></div>
+                <div class="image-container">
+                    <img loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/fe8e8ba5efaf2ac8f329b0180aa3846bfe79b4e30a8bb83845ab347dab50139c?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                        alt="" class="responsive-image" />
+                </div>
+                <div class="image-containerman">
+                    <img loading="lazy"
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/4b2b286823f58d2235c9bd29b2cb62e98db77c6e2d14b30ddd1528d01088928c?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                        class="responsive-imageman" alt="Description of the image" />
+                    
+                </div>
+            </div> -->
+
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function toggleDepartmentField() {
+            const role = document.getElementById("role").value;
+            const departmentGroup = document.getElementById("departmentGroup");
+
+            if (role === "Admin" || role === "Employee") {
+                departmentGroup.style.display = "block"; // Show department field
+                document.getElementById("department").required = true; // Make it required
+            } else {
+                departmentGroup.style.display = "none"; // Hide department field
+                document.getElementById("department").required = false; // Remove required attribute
+            }
+        }
+    </script>
+      
+    <!-- <script>
+        function predictDepartment() {
+            let complaintText = document.getElementById("complaint").value;
+    
+            if (complaintText.length < 5) {
+                return;  // Ignore short inputs
+            }
+    
+            fetch('/predict_department', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ complaint: complaintText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.department) {
+                    document.getElementById("department").value = data.department;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script> -->
+    
+</body>
+
+</html>

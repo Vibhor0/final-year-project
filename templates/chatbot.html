@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../static/styles/chatbot.css">
+  </head>
+  <body>
+
+    <div class="chat-container">
+      <div class="sakhi">
+        <h1>Sakhi</h1>
+      </div>
+      <div class="messages" id="messages">
+        <!-- Chat messages will appear here -->
+      </div>
+
+      <div class="input-area">
+        <form id="chat-form">
+          <input
+            type="text"
+            id="user-message"
+            placeholder="Type your message..."
+            required
+          />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+
+      <div class="container">
+        <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary">
+          Back to Dashboard
+        </a>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("chat-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const message = document.getElementById("user-message").value;
+
+        // Display user message
+        const messageContainer = document.createElement("div");
+        messageContainer.classList.add("message", "user-message");
+        messageContainer.textContent = message;
+        document.getElementById("messages").appendChild(messageContainer);
+        document.getElementById("user-message").value = "";
+
+        // Fetch bot response from the server
+        fetch("/chatbot", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `message=${message}`,
+      })
+      .then((response) => response.json())  // <-- Expect JSON instead of text  
+      .then((data) => {
+          // Display bot response
+          const botMessageContainer = document.createElement("div");
+          botMessageContainer.classList.add("message", "bot-response");
+          botMessageContainer.textContent = data.bot_response;  // <-- Extract JSON key
+          document.getElementById("messages").appendChild(botMessageContainer);
+      });
+
+      });
+    </script>
+  </body>
+</html>

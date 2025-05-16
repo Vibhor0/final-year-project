@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../static/styles/admindashboard.css">
+  <style>
+    .stats-section,
+    .graph-section {
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+
+
+
+  <nav class="navbar navbar-expand-lg fixed-top ">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Admin Dashboard</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a1f340de38454f63005e3dace9973a729f9f08aeab985a9d35b0edf20ed8e4b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+              class="content-image" alt="" />
+          </li>
+          <li>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/68f9ba49f4952ad69c570d1f832dab224108b4ff93d1f93caf0f657c1e4e82f2?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+              class="content-image" alt="Content image" />
+          </li>
+
+        </ul>
+      </div>
+      <ul class="navbar-nav ms-auto">
+
+        <li>
+          <span class="language-text">English</span>
+          <img loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/af624e064cb55ab1cdf69bbe6422929a63a513da78f61a4624eaee1407fbde44?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            class="language-icon" alt="Language selection icon" />
+          <img loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/7928c972bb6e1037556ab7ab515e0a559e351033285b3b5d48a3a023ce0ed5b3?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            class="notification-icon" alt="Notification icon" />
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Welcome, {{ current_user.username }}!</a>
+        </li>
+        <li>
+          <img loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/99921d6dd55c3f3fb1416f7f306139ff0a761b5ceb085b59577bbc93faf1e710?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+            class="user-avatar" alt="User avatar" onmouseenter="showLogoutButton()" onmouseleave="hideLogoutButton()"
+            onclick="logout()" ; />
+
+        </li>
+        <li class="nav-item">
+          <a id="logout-button" class="nav-link btn btn-danger text-white mr-10 ml-10" href="{{ url_for('logout') }}"
+            style="visibility: hidden;">
+            Logout
+          </a>
+        </li>
+
+      </ul>
+
+    </div>
+  </nav>
+
+
+  <main class="main-content">
+    <div class="content-wrapper">
+
+
+      <div class="sidebar">
+        <div class="sidebar-menu">
+          <ul class="menu-list">
+            <li class="menu-item-wrapper">
+              <div class="menu-item-content">
+                <div class="menu-item-icon-wrapper">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/8839ffa641fed9485b4a3aa77a08aae38d7d6ebe98522e48ed28906a7471be6b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                    alt="Dashboard icon" class="menu-icon" />
+                </div>
+                <span class="dashboard">DASHBOARD</span>
+              </div>
+            </li>
+            <li class="menu-item-wrapper">
+              <div class="menu-item-content">
+
+            </li>
+            <li class="menu-item-wrapper">
+              <div class="menu-item-content">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/d272c53a86b56b04614b0bd5ed5b2809e569c6de3ff9a63f463187a81e29bab0?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                  alt="Complaints icon" class="menu-icon" />
+                <span class="menu-item-text">ComplaintList</span>
+
+              </div>
+            </li>
+
+
+
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col">
+
+            <h3 class="mt-4">Complaints List</h3>
+            <table class="table table-striped table-bordered mt-3">
+              <thead class="thead-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>Unique ID</th>
+                  <th>Department</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>PNR Number</th>
+                  <th>Age</th>
+                  <th>Additional Info</th>
+                  <th>Images</th>
+                  <th>Status</th>
+                  <th>User ID</th>
+                  <th>Assigned Employee ID</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for complaint in complaints %}
+                <tr>
+                  <td>{{ complaint.id }}</td>
+                  <td>{{ complaint.unique_id }}</td>
+                  <td>{{ complaint.department }}</td>
+                  <td>{{ complaint.date }}</td>
+                  <td>{{ complaint.time }}</td>
+                  <td>{{ complaint.pnr_no }}</td>
+                  <td>{{ complaint.age }}</td>
+                  <td>{{ complaint.additional_info }}</td>
+                  <td>
+                    {% if complaint.images %}
+                    <a href="{{ url_for('static', filename='uploads/' + complaint.images) }}" target="_blank">View
+                      Images</a>
+                    {% else %}
+                    No Images
+                    {% endif %}
+                  </td>
+                  <td>{{ complaint.status }}</td>
+                  <td>{{ complaint.user_id }}</td>
+                  <td>{{ complaint.assigned_employee_id }}</td>
+                  <td>
+                    {% if complaint.feedback %}
+
+
+                    <button type="button" class="btn btn-info btn-sm view-feedback-btn"
+                      data-target="#feedbackModal{{ complaint.id }}"
+                      data-feedback="{{ complaint.feedback.feedback_text }}">
+                      View Feedback
+                    </button>
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="feedbackModal{{ complaint.id }}" tabindex="-1"
+                      aria-labelledby="feedbackModalLabel{{ complaint.id }}" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="feedbackModalLabel{{ complaint.id }}">Feedback for Complaint #{{
+                              complaint.unique_id }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <p>{{ complaint.feedback.feedback_text }}</p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% else %}
+                    No Feedback
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <a href="{{ url_for('view_employees' ) }}" class="btn btn-primary mt-3">View Employees </a>
+          </div>
+
+
+          <!-- Statistics Section  -->
+          <div class="container2 mt-5">
+            <h2>Statistics</h2>
+            <div class="row ml-2 mr-2">
+              <div class="col-md-4 graph-section mb-3 ">
+                <h3>Feedback Trend</h3>
+                <canvas id="feedbackTrendChart"></canvas>
+              </div>
+
+              <div class="col-md-4 stats-section mb-3">
+                <h3>Feedback Sentiments</h3>
+                <ul class="list-group">
+                  <li class="list-group-item">Positive: {{ sentiment_counts['Positive'] }}</li>
+                  <li class="list-group-item">Neutral: {{ sentiment_counts['Neutral'] }}</li>
+                  <li class="list-group-item">Negative: {{ sentiment_counts['Negative'] }}</li>
+                </ul>
+              </div>
+              <div class="col-md-4 stats-section mb-3">
+                <h3>Average User Rating</h3>
+                <p class="lead">{{ avg_rating }}</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Chart.js Script -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // const trendData = {{ trend_data| safe }};
+    const ctx = document.getElementById('feedbackTrendChart').getContext('2d');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: trendData.labels,
+        datasets: [{
+          label: 'Feedback Count',
+          data: trendData.data,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderWidth: 2,
+          fill: true,
+        }]
+      },
+      options: {
+        scales: {
+          x: { title: { display: true, text: 'Date' } },
+          y: { title: { display: true, text: 'Feedback Count' } }
+        }
+      }
+    });
+
+    function logout() {
+      window.location.href = "{{ url_for('logout') }}";
+    }
+    // logout button toggle 
+    function showLogoutButton() {
+      document.getElementById("logout-button").style.visibility = "visible";
+    }
+
+    function hideLogoutButton() {
+      document.getElementById("logout-button").style.visibility = "hidden";
+    }
+
+
+
+
+
+    // Attach event listener to all "View Feedback" buttons
+    document.addEventListener('DOMContentLoaded', function () {
+      const buttons = document.querySelectorAll('.view-feedback-btn');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', function () {
+          const feedbackText = this.getAttribute('data-feedback');
+          alert(`Feedback: ${feedbackText}`);
+        });
+      });
+    });
+
+
+
+  </script>
+
+  <!-- JS Libraries -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+  <footer class="footer">
+    <p>Copyright© 2024 Rail Sahayak. All Rights Reserved</p>
+    <nav>
+      <a href="#home">Home</a> |
+      <a href="#faqs">FAQs</a> |
+      <a href="#admin-login">Railway Admin Login</a> |
+      <a href="#mis-login">MIS Report Login</a>
+    </nav>
+  </footer>
+
+</body>
+
+</html>

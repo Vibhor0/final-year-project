@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employees in {{ department }} Department</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/styles/viewemploye.css">
+</head>
+<style>
+/* Container Styling */
+
+
+</style>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top ">
+        <div class="container-fluid">
+          <!-- <a class="navbar-brand" href="#">Admin Dashboard</a> -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+              <li>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a1f340de38454f63005e3dace9973a729f9f08aeab985a9d35b0edf20ed8e4b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                  class="content-image" alt="" />
+              </li>
+              <li>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/68f9ba49f4952ad69c570d1f832dab224108b4ff93d1f93caf0f657c1e4e82f2?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                  class="content-image" alt="Content image" />
+              </li>
+    
+            </ul>
+          </div>
+          <ul class="navbar-nav ms-auto">
+    
+            <li>
+              <span class="language-text">English</span>
+              <img loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/af624e064cb55ab1cdf69bbe6422929a63a513da78f61a4624eaee1407fbde44?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                class="language-icon" alt="Language selection icon" />
+              <img loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/7928c972bb6e1037556ab7ab515e0a559e351033285b3b5d48a3a023ce0ed5b3?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                class="notification-icon" alt="Notification icon" />
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Welcome, {{ current_user.username }}!</a>
+            </li>
+            <li>
+              <img loading="lazy"
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/99921d6dd55c3f3fb1416f7f306139ff0a761b5ceb085b59577bbc93faf1e710?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+                class="user-avatar" alt="User avatar" onmouseenter="showLogoutButton()" onmouseleave="hideLogoutButton()"
+                onclick="logout()" ; />
+    
+            </li>
+            <li class="nav-item">
+              <a id="logout-button" class="nav-link btn btn-danger text-white mr-10 ml-10" href="{{ url_for('logout') }}"
+                style="visibility: hidden;">
+                Logout
+              </a>
+            </li>
+    
+          </ul>
+    
+        </div>
+      </nav>
+    
+
+      <main class="main-content">
+        <div class="content-wrapper">
+                <!-- <div class="yellowcontainer"> -->
+                  <div class="sidebar">
+                    <div class="sidebar-menu">
+                      <ul class="menu-list">
+                        <li class="menu-item-wrapper">
+                          <div class="menu-item-content">
+                            <div class="menu-item-icon-wrapper">
+                              <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/8839ffa641fed9485b4a3aa77a08aae38d7d6ebe98522e48ed28906a7471be6b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186" alt="Dashboard icon" class="menu-icon" />
+                            </div>
+                            <span class="dashboard">DASHBOARD</span>
+                          </div>
+                        </li>
+                        <li class="menu-item-wrapper">
+                          <div class="menu-item-content">
+                            
+                        </li>
+                        <li class="menu-item-wrapper">
+                          <div class="menu-item-content">
+                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d272c53a86b56b04614b0bd5ed5b2809e569c6de3ff9a63f463187a81e29bab0?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186" alt="Complaints icon" class="menu-item-icon" />
+                            <span class="menu-item-text">Employees</span>
+                            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/aa08ce4c900d467cb31a12a09bf55a6324b166d80e62bf2b5778f9bd5a4d9063?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186" alt="Expand complaints menu" class="menu-item-arrow" />
+                          </div>
+                        </li>
+                        
+                        
+                       
+                      </ul>
+                    </div>
+        </div> 
+        
+    <div class="container mt-5">
+        <h1 class="employee-title">Employees in {{ department }} Department</h1>
+        <table class="table table-bordered mt-3 employee-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.id }}</td>
+                    <td>{{ employee.username }}</td>
+                    <td>{{ employee.role }}</td>
+                    <td>{{ employee.department }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    
+</main> 
+
+
+
+
+
+
+    <!-- <div class="container">
+        <h1 class="mt-5">Employees in {{ department }} Department</h1>
+        
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ employee.id }}</td>
+                    <td>{{ employee.username }}</td>
+                    <td>{{ employee.role }}</td>
+                    <td>{{ employee.department }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div> -->
+<script>
+  function logout() {
+  window.location.href = "{{ url_for('logout') }}";
+}
+// logout button toggle 
+function showLogoutButton() {
+  document.getElementById("logout-button").style.visibility = "visible";
+}
+
+function hideLogoutButton() {
+  document.getElementById("logout-button").style.visibility = "hidden";
+}
+
+</script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+<footer class="footer">
+  <p>Copyright© 2024 Rail Sahayak. All Rights Reserved</p>
+  <nav>
+      <a href="#home">Home</a> |
+      <a href="#faqs">FAQs</a> |
+      <a href="#admin-login">Railway Admin Login</a> |
+      <a href="#mis-login">MIS Report Login</a>
+  </nav>
+</footer>
