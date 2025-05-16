@@ -1,0 +1,17 @@
+Flask
+Flask-SQLAlchemy
+SQLAlchemy
+Flask-Login
+Flask-Migrate
+Flask-SocketIO
+textblob
+matplotlib
+joblib
+numpy
+pandas
+scikit-learn
+python-dotenv
+langchain
+langchain-community
+watchdog
+gunicorn
