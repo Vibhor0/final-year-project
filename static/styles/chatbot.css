@@ -1,0 +1,84 @@
+   .chat-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            border: 10px ridge  #347928;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-family: Arial, sans-serif;
+        }
+        
+        .sakhi{
+            text-align: center;
+            background-color: #a3d68a;
+            margin: 0;
+            padding: 0;
+        }
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #138ae4b6;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #e1f5fe;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .bot-response {
+            background-color: #c0eba6;
+            align-self: flex-start;
+        }
+        .input-area {
+            display: flex;
+            padding: 10px;
+            background-color: #347928;
+            padding-left: 50px;
+            
+        }
+        #user-message {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #c0eba6;
+            color: #347928;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        button:hover {
+            background-color: #a3d68a;
+        }
+        .container {
+            text-align:left;
+            margin: 10px 0 10px 10px;
+        }
+        .btn-secondary {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #347928;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            width: 170px;
+        }
+        .btn-secondary:hover {
+            background-color: #2a6320;
+        }
