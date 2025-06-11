@@ -15,38 +15,38 @@
       <div class="logo-container">
         <img
           loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a1f340de38454f63005e3dace9973a729f9f08aeab985a9d35b0edf20ed8e4b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/68f9ba49f4952ad69c570d1f832dab224108b4ff93d1f93caf0f657c1e4e82f2?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
           class="logo-image"
           alt="Primary logo"
         />
         <img
           loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/68f9ba49f4952ad69c570d1f832dab224108b4ff93d1f93caf0f657c1e4e82f2?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
+          
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/3a1f340de38454f63005e3dace9973a729f9f08aeab985a9d35b0edf20ed8e4b?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
           class="secondary-logo"
           alt="Secondary logo"
         />
       </div>
       <div class="user-info-container">
         <div class="language-user-wrapper">
-          <div class="">
-            <div>
-              <select id="language-selector" style="margin-top: 0px; padding: 10px;">
+          <div class="left-icon">
+            
+              <!-- <select id="language-selector" style="margin-top: 0px; padding: 10px;">
                 <option value="en">English</option>
                 <option value="hi">Hindi</option>
                 <option value="mr">Marathi</option>
-            </select>
-            </div>
-            <div class="nav-item">
+            </select> -->
+            <div class="nav-item-out">
               {% if current_user.is_authenticated %}
                 <span>Welcome, {{ current_user.username }}!</span>
                 <a data-i18n="logout" class="nav-link btn text-white mr-10 ml-10" style="background-color: red; " href="{{ url_for('logout') }}">Logout</a>
-            {% else %}
-                <a data-i18n="login" class="nav-link btn text-white mr-10 ml-10" style="background-color: green; margin-left:15px ;" href="{{ url_for('login') }}">Login</a>
             {% endif %}
               
-            </div>
+            
+          </div>
+            
         </div>
-        <div class="notification-container">
+        <!-- <div class="notification-container">
           <img
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/99921d6dd55c3f3fb1416f7f306139ff0a761b5ceb085b59577bbc93faf1e710?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
@@ -58,7 +58,7 @@
             ;
           />
           
-        </div>
+        </div> -->
       </div>
     </header>
 
@@ -114,35 +114,49 @@
           justify-content: center;">Grievance Detail</h1>
           <!-- <div class="divider" style="margin: 0px; display: flex; justify-content: center;"></div> -->
           <div class="form-wrapper">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="messages-container mb-3">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
             
             <form method="POST" enctype="multipart/form-data" class="grievance-form" >
               <div class="form-group">
                 <label for="pnr_no">PNR Number</label>
                 <input
-                  type="text"
-                  class="form-control"
-                  id="pnr_no"
-                  name="pnr_no"
-                  required
-                />
+            type="text"
+            class="form-control"
+            id="pnr_no"
+            name="pnr_no"
+            value="{{ request.form.pnr_no if request.method == 'POST' else '' }}"
+          />
               </div>
               <div class="form-group">
                 <label for="age">Age</label>
                 <input
-                  type="number"
-                  class="form-control"
-                  id="age"
-                  name="age"
-                  required
-                />
+            type="number"
+            class="form-control"
+            id="age"
+            name="age"
+            value="{{ request.form.age if request.method == 'POST' else '' }}"
+          />
               </div>
               <div class="form-group">
                 <label for="additional_info">Additional Information</label>
                 <textarea
-                  class="form-control"
-                  id="additional_info"
-                  name="additional_info"
-                ></textarea>
+            class="form-control"
+            id="additional_info"
+            name="additional_info"
+          >{{ request.form.additional_info if request.method == 'POST' else '' }}</textarea>
               </div>
               <div class="form-group">
                 <label for="images">Upload Images</label>
@@ -178,8 +192,11 @@
     
     </main>
 
-    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+      
       function showLogoutButton() {
         document.getElementById("logout-button").style.visibility = "visible";
       }
