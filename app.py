@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, and_
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-# from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
@@ -67,6 +67,8 @@ migrate = Migrate(app, db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_message = None
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -306,7 +308,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and (user.password, password):
+        if user and check_password_hash(user.password, password):
             login_user(user)
             # Redirect based on role and department
             if user.role.lower() == 'admin':
@@ -325,7 +327,7 @@ def login():
 def register():
     if request.method == 'POST':
         username = request.form['username']
-        password = (request.form['password'])  # Hash password
+        password = generate_password_hash(request.form['password'])  # Hash password
         role = request.form['role']
         department = request.form['department'] if role in ['Admin', 'Employee'] else None         
         new_user = User(username=username, password=password, role=role, department=department)
@@ -424,7 +426,7 @@ def complaint():
     return render_template('complaint.html')
 '''
 
-
+'''
 @app.route('/complaint', methods=['GET', 'POST'])
 @login_required
 def complaint():
@@ -485,7 +487,95 @@ def complaint():
         return redirect(url_for('user_dashboard'))
 
     return render_template('complaint.html')
+'''
+@app.route('/complaint', methods=['GET', 'POST'])
+@login_required
+def complaint():
+    if request.method == 'POST':
+        age_str = request.form.get('age') # Get age as string initially
+        pnr_no = request.form.get('pnr_no')
+        additional_info = request.form.get('additional_info', '')
 
+        # --- NEW VALIDATION CODE STARTS HERE ---
+        errors = []
+
+        # PNR Validation
+        # Make PNR optional if additional_info doesn't strongly suggest a train journey related complaint.
+        # For simplicity, we'll make it required if additional_info is provided,
+        # but in a real app, you might categorize additional_info first.
+        # For now, let's assume PNR is generally expected if a user is logging a complaint.
+        if not pnr_no:
+            errors.append('PNR Number is required.')
+        elif not pnr_no.isdigit() or len(pnr_no) != 10:
+            errors.append('PNR Number must be a 10-digit number.')
+
+        # Age Validation
+        if not age_str:
+            errors.append('Age is required.')
+        else:
+            try:
+                age = int(age_str)
+                if not (1 <= age <= 120): # Assuming a realistic age range
+                    errors.append('Age must be between 1 and 120.')
+            except ValueError:
+                errors.append('Invalid age. Please enter a valid number.')
+
+        # If there are any validation errors, flash them and redirect back
+        if errors:
+            for error in errors:
+                flash(error, 'error')
+            return redirect(url_for('complaint'))
+        # --- NEW VALIDATION CODE ENDS HERE ---
+
+        # If validation passes, proceed with the rest of the complaint submission logic
+        # Convert age to int after successful validation
+        age = int(age_str)
+
+        unique_id = str(datetime.now().timestamp())
+        department = determine_department(additional_info) # ML-based classification
+        print(department) # For debugging
+
+        images = request.files.getlist('images')
+        image_paths = []
+        for image in images:
+            if image:
+                filename = secure_filename(image.filename)
+                image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                image_paths.append(filename)
+        images_str = ','.join(image_paths)
+
+        employee = (
+            db.session.query(User)
+            .filter_by(role='Employee', department=department)
+            .outerjoin(Complaint, and_(Complaint.assigned_employee_id == User.id, Complaint.status == 'Unsolved'))
+            .group_by(User.id)
+            .order_by(func.count(Complaint.id).asc()) # Order by least complaints
+            .first()
+        )
+
+        complaint = Complaint(
+            unique_id=unique_id,
+            department=department,
+            date=datetime.now().date(),
+            time=datetime.now().time(),
+            pnr_no=pnr_no,
+            age=age,
+            additional_info=additional_info,
+            images=images_str,
+            user_id=current_user.id,
+            assigned_employee_id=employee.id if employee else None
+        )
+
+        complaint.urgency = calculate_urgency(complaint, inverse_mapping)
+
+        db.session.add(complaint)
+        db.session.commit()
+
+        #flash(f'Complaint submitted successfully and assigned to {department}', 'success')
+
+        return redirect(url_for('user_dashboard'))
+
+    return render_template('complaint.html')
 
 
 @app.route('/track_complaints')
@@ -828,15 +918,38 @@ def employee_performance(department):
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.', 'info')
+    #flash('You have been logged out.', 'info')
     return redirect(url_for('user_dashboard'))
 
+
+'''
 @app.route('/view_database')
 def view_database():
     users = User.query.all()  # Fetch all users from the User table
     complaints = Complaint.query.all()  # Fetch all complaints from the Complaint table
     feedbacks = Feedback.query.all()
     return render_template('database.html', users=users, complaints=complaints, feedbacks=feedbacks)
+'''
+
+
+@app.route('/view_database')
+def view_database():
+    users = User.query.all()
+    complaints = Complaint.query.all()
+    feedbacks = Feedback.query.all()
+
+    # --- NEW CODE FOR FEEDBACK TREND ---
+    # Prepare data for feedback trend graph (feedback count per day)
+    feedback_dates = [feedback.created_at.date().isoformat() for feedback in feedbacks if feedback.created_at]
+    feedback_trend = Counter(feedback_dates)
+    sorted_trend_data = sorted(feedback_trend.items())
+    trend_data = {
+        "labels": [date for date, _ in sorted_trend_data],
+        "data": [count for _, count in sorted_trend_data]
+    }
+    # --- END NEW CODE ---
+
+    return render_template('database.html', users=users, complaints=complaints, feedbacks=feedbacks, trend_data=json.dumps(trend_data))
 
 if __name__ == "__main__":
     with app.app_context():
