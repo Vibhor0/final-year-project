@@ -43,11 +43,11 @@ try:
     with open('project-model-pickle-files/urgency-predict/tfidf_vectorizer_current.pkl', 'rb') as f:
         urgency_tfidf_vectorizer = joblib.load(f)
 
-    with open('project-model-pickle-files/urgency-predict/logistic_regression_classifier_current.pkl', 'rb') as f:
+    with open('project-model-pickle-files/urgency-predict/urgency_classifier.pkl', 'rb') as f:
         urgency_classifier_model = joblib.load(f)
     print("New urgency classification model components loaded successfully.")
 except FileNotFoundError:
-    print("Error: New urgency model files not found. Ensure 'tfidf_vectorizer_current.pkl' and 'logistic_regression_classifier_current.pkl' are in 'project-model-pickle-files/urgency-predict/'.")
+    print("Error: New urgency model files not found. Ensure 'tfidf_vectorizer_current.pkl' and 'urgency_classifier.pkl' are in 'project-model-pickle-files/urgency-predict/'.")
     # You might want to handle this more gracefully, e.g., by setting default models or raising an error.
     urgency_tfidf_vectorizer = None
     urgency_classifier_model = None
