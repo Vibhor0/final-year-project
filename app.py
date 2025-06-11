@@ -39,18 +39,22 @@ with open('project-model-pickle-files/department-classifier/label_encoder.pkl', 
 
 
 # Load the urgency-predict model files
-with open('project-model-pickle-files/urgency-predict/tfidf_vectorizer_prior_72.pkl', 'rb') as f:
-    tfidf_vectorizer = pickle.load(f)
+try:
+    with open('project-model-pickle-files/urgency-predict/tfidf_vectorizer_current.pkl', 'rb') as f:
+        urgency_tfidf_vectorizer = joblib.load(f)
 
-with open('project-model-pickle-files/urgency-predict/scaler_prior_72.pkl', 'rb') as f:
-    scaler = pickle.load(f)
-
-with open('project-model-pickle-files/urgency-predict/stacking_model_prior_72.pkl', 'rb') as f:
-    urgency_model = pickle.load(f)
-
-with open('project-model-pickle-files/urgency-predict/urgency_encoder_prior_72.pkl', 'rb') as f:
-    urgency_encoder = pickle.load(f)
-
+    with open('project-model-pickle-files/urgency-predict/logistic_regression_classifier_current.pkl', 'rb') as f:
+        urgency_classifier_model = joblib.load(f)
+    print("New urgency classification model components loaded successfully.")
+except FileNotFoundError:
+    print("Error: New urgency model files not found. Ensure 'tfidf_vectorizer_current.pkl' and 'logistic_regression_classifier_current.pkl' are in 'project-model-pickle-files/urgency-predict/'.")
+    # You might want to handle this more gracefully, e.g., by setting default models or raising an error.
+    urgency_tfidf_vectorizer = None
+    urgency_classifier_model = None
+except Exception as e:
+    print(f"An error occurred while loading new urgency model components: {e}")
+    urgency_tfidf_vectorizer = None
+    urgency_classifier_model = None
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -170,11 +174,6 @@ import pandas as pd
 from textblob import TextBlob
 import pickle 
 
-# Create inverse_mapping for label conversion
-if isinstance(urgency_encoder, dict):
-    inverse_mapping = {v: k for k, v in urgency_encoder.items()}  # Reverse dictionary
-else:
-    inverse_mapping = urgency_encoder.inverse_transform  # Use LabelEncoder method
 
 
 # -------------------- Feature Extraction --------------------
@@ -260,37 +259,31 @@ def calculate_urgency(complaint, inverse_mapping):
 '''
 
 # -------------------- Urgency Calculation (Only Model-Based) --------------------
-
-def calculate_urgency(complaint, inverse_mapping):
+# -------------------- Urgency Calculation (Only Model-Based) --------------------
+# LINE 115: Modify the calculate_urgency function.
+def calculate_urgency(complaint):
     """
-    Calculates urgency based **only on model prediction**.
+    Calculates urgency based on the trained Logistic Regression model.
+    The model uses 'Category' and 'Grievance Description' (additional_info)
+    as input.
     """
+    if urgency_tfidf_vectorizer is None or urgency_classifier_model is None:
+        print("Urgency classification model not loaded. Returning 'Medium' by default.")
+        return "Medium" # Fallback if model failed to load
 
-    # Get complaint text
-    complaint_text = getattr(complaint, "description", "")
+    # Combine department and grievance description (additional_info)
+    # This matches the 'combined_text' feature used during model training.
+    combined_text = f"{complaint.department} {complaint.additional_info}"
 
-    # Convert text into TF-IDF features
-    text_features = tfidf_vectorizer.transform([complaint_text]).toarray()
+    # Convert combined text into TF-IDF features using the loaded vectorizer
+    text_features_transformed = urgency_tfidf_vectorizer.transform([combined_text])
 
-    # Extract and scale numerical features
-    numerical_features = extract_features(complaint_text)
-    numerical_features_df = pd.DataFrame(numerical_features, columns=["text_length", "num_words", "sentiment"])
-    scaled_numerical_features = scaler.transform(numerical_features_df)  # ✅ Correct usage
+    # Predict urgency level using the loaded classifier
+    # The LogisticRegression model trained on string labels ('high', 'medium', 'low')
+    # will directly output these strings.
+    predicted_urgency_label = urgency_classifier_model.predict(text_features_transformed)[0]
 
-    # Combine features
-    combined_features = np.hstack((text_features, scaled_numerical_features))
-
-    # Ensure feature shape matches model expectations
-    if combined_features.shape[1] != urgency_model.n_features_in_:
-        raise ValueError(f"Feature mismatch: Model expects {urgency_model.n_features_in_} features, but got {combined_features.shape[1]}.")
-
-    # Predict urgency level
-    model_prediction = urgency_model.predict(combined_features)[0]
-
-    # Convert label to category
-    urgency_label = inverse_mapping[model_prediction] if isinstance(inverse_mapping, dict) else inverse_mapping([model_prediction])[0]
-
-    return urgency_label  # Directly return "Low", "Medium", or "High"
+    return predicted_urgency_label
 
 
 
@@ -566,7 +559,7 @@ def complaint():
             assigned_employee_id=employee.id if employee else None
         )
 
-        complaint.urgency = calculate_urgency(complaint, inverse_mapping)
+        complaint.urgency = calculate_urgency(complaint)
 
         db.session.add(complaint)
         db.session.commit()
