@@ -35,30 +35,17 @@
           </div>
           <ul class="navbar-nav ms-auto">
     
-            <li>
-              <span class="language-text">English</span>
-              <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/af624e064cb55ab1cdf69bbe6422929a63a513da78f61a4624eaee1407fbde44?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
-                class="language-icon" alt="Language selection icon" />
-              <img loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/7928c972bb6e1037556ab7ab515e0a559e351033285b3b5d48a3a023ce0ed5b3?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
-                class="notification-icon" alt="Notification icon" />
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Welcome, {{ current_user.username }}!</a>
-            </li>
-            <li>
+            <li class="nav-item-out">
               <img loading="lazy"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/99921d6dd55c3f3fb1416f7f306139ff0a761b5ceb085b59577bbc93faf1e710?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
-                class="user-avatar" alt="User avatar" onmouseenter="showLogoutButton()" onmouseleave="hideLogoutButton()"
-                onclick="logout()" ; />
+                class="user-avatar" alt="User avatar" />
     
-            </li>
-            <li class="nav-item">
-              <a id="logout-button" class="nav-link btn btn-danger text-white mr-10 ml-10" href="{{ url_for('logout') }}"
-                style="visibility: hidden; ">
-                Logout
-              </a>
+              {% if current_user.is_authenticated %}
+                <span>Welcome, {{ current_user.username }}!</span>
+                <a data-i18n="logout" class="nav-link btn text-white mr-10 ml-10" style="background-color: red; " href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+              
+            
             </li>
     
           </ul>
@@ -112,9 +99,9 @@
                     </td>
                      <!-- <td>{{ complaint.urgency }}</td>  -->
                    <td>
-                        {% if complaint.urgency is not none and complaint.urgency >= 30 %}
+                        {% if complaint.urgency is not none and complaint.urgency|int >= 30 %}
                             <span class="badge badge-danger">High</span>
-                        {% elif complaint.urgency is not none and complaint.urgency >= 20 %}
+                        {% elif complaint.urgency is not none and complaint.urgency|int >= 20 %}
                             <span class="badge badge-warning">Medium</span>
                         {% else %}
                             <span class="badge badge-secondary">Low</span>
