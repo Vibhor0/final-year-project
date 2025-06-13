@@ -100,4 +100,31 @@ body{
       text-align: center;
     }
   }
+
+  .rating {
+    direction: rtl; /* Right-to-left for proper star selection */
+    unicode-bidi: bidi-override;
+    display: flex;
+    justify-content: center;
+    gap: 5px; /* Adds spacing between stars */
+}
+
+.rating input {
+    display: none; /* Hide radio buttons */
+}
+
+.rating label {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.3s;
+    padding: 0 5px; /* Ensure spacing between stars */
+}
+
+.rating input:checked ~ label,
+.rating label:hover,
+.rating label:hover ~ label {
+    color: #ffcc00; /* Yellow color when selected or hovered */
+}
+
   
