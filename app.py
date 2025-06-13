@@ -43,11 +43,11 @@ try:
     with open('project-model-pickle-files/urgency-predict/tfidf_vectorizer_current.pkl', 'rb') as f:
         urgency_tfidf_vectorizer = joblib.load(f)
 
-    with open('project-model-pickle-files/urgency-predict/urgency_classifier.pkl', 'rb') as f:
+    with open('project-model-pickle-files/urgency-predict/logistic_regression_classifier_current.pkl', 'rb') as f:
         urgency_classifier_model = joblib.load(f)
     print("New urgency classification model components loaded successfully.")
 except FileNotFoundError:
-    print("Error: New urgency model files not found. Ensure 'tfidf_vectorizer_current.pkl' and 'urgency_classifier.pkl' are in 'project-model-pickle-files/urgency-predict/'.")
+    print("Error: New urgency model files not found. Ensure 'tfidf_vectorizer_current.pkl' and 'logistic_regression_classifier_current.pkl' are in 'project-model-pickle-files/urgency-predict/'.")
     # You might want to handle this more gracefully, e.g., by setting default models or raising an error.
     urgency_tfidf_vectorizer = None
     urgency_classifier_model = None
@@ -311,8 +311,8 @@ def login():
             return redirect(url_for('user_dashboard'))  # Assuming there's a user role
         
         else:
-            flash('Invalid credentials', 'danger')
-            flash("This is a test message", "info")
+            #flash('Invalid credentials', 'danger')
+            #flash("This is a test message", "info")
             print("hello") 
     return render_template('login.html')
 
@@ -326,7 +326,7 @@ def register():
         new_user = User(username=username, password=password, role=role, department=department)
         db.session.add(new_user)
         db.session.commit()
-        flash('Registration successful! You can log in now.', 'success')
+        #flash('Registration successful! You can log in now.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html')
 
@@ -516,7 +516,7 @@ def complaint():
         # If there are any validation errors, flash them and redirect back
         if errors:
             for error in errors:
-                flash(error, 'error')
+                flash(error, 'complaint_error')
             return redirect(url_for('complaint'))
         # --- NEW VALIDATION CODE ENDS HERE ---
 
@@ -592,7 +592,7 @@ def submit_feedback(complaint_id):
     
     # Ensure the complaint is completed before allowing feedback
     if complaint.status != 'Completed':
-        flash('You can only submit feedback for completed complaints.', 'warning')
+        #flash('You can only submit feedback for completed complaints.', 'warning')
         return redirect(url_for('track_complaints'))
 
     if request.method == 'POST':
@@ -603,7 +603,7 @@ def submit_feedback(complaint_id):
         # Check if feedback already exists for the complaint
         existing_feedback = Feedback.query.filter_by(complaint_id=complaint.id).first()
         if existing_feedback:
-            flash('Feedback for this complaint has already been submitted.', 'info')
+            #flash('Feedback for this complaint has already been submitted.', 'info')
             return redirect(url_for('track_complaints'))
 
         # Create new feedback entry
@@ -619,7 +619,7 @@ def submit_feedback(complaint_id):
         complaint.feedback_status = 'Completed'
         db.session.commit()
         
-        flash('Feedback submitted successfully!', 'success')
+        #flash('Feedback submitted successfully!', 'success')
         return redirect(url_for('user_dashboard'))
 
     return render_template('feedback_form.html', complaint=complaint)
@@ -668,7 +668,7 @@ def admin_dashboard(department):
 def view_employees():
     # Ensure the current user is an admin
     if current_user.role != 'Admin':
-        flash("Access denied: Only admins can view this page.", 'danger')
+        #flash("Access denied: Only admins can view this page.", 'danger')
         return redirect(url_for('home'))
     
     # Filter employees by the admin's department
@@ -681,7 +681,7 @@ def view_employees():
 @login_required
 def employee_dashboard():
     if current_user.role != 'Employee':
-        flash("Access denied: Only employees can view this page.", 'danger')
+        #flash("Access denied: Only employees can view this page.", 'danger')
         return redirect(url_for('home'))
     
     # Fetch complaints assigned to the current employee
