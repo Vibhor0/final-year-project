@@ -40,9 +40,17 @@ nav {
 .content-image {
   object-fit: contain;
   object-position: center;
+  width: 4rem;  
+  height: 4rem;
+  /* margin-top: 0.5rem; */
+}
+
+.content-image-phone{
+  object-fit: contain;
+  object-position: center;
   width: 2rem;  
   height: 2rem;
-  margin-top: 0.5rem;
+  /* margin-top: 0.5rem; */
 }
 
 .language-selector {
@@ -391,7 +399,7 @@ nav {
   display: flex;
   align-items: center;
   flex-wrap: wrap; /* Allow wrapping for smaller screens */
-  margin-top: 4rem; /* Adjust for your layout */
+  margin-top: 5rem; /* Adjust for your layout */
   height: 100px; /* Avoid fixed height */
   gap: 1rem; /* Space between elements */
   background-color: #347928;
