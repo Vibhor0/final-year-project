@@ -34,8 +34,10 @@ main {
     aspect-ratio: 0.62;
     object-fit: contain;
     object-position: center;
-    width: 44px;
+    width: 70px;
+    height: 80px;
     margin-left: 60px;
+    padding: 0px;
   }
   .secondary-logo {
     aspect-ratio: 1.1;
@@ -120,7 +122,7 @@ main {
   .navigation-bar {
     background-color: #347928;
     display: flex;
-    margin-top: 7px;
+    margin-top: 30px;
     width: 100%;
     flex-direction: column;
     align-items: center;
@@ -453,4 +455,115 @@ main {
   font-weight: 700;
   font-size: 14px;
   padding: 1px;
+}
+
+nav {
+  background-color: #fff;
+  align-content: space-between;
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+}
+.navbar-nav ul li a {
+  font-style: normal;
+  font-size: 1rem;
+  color: black;
+}
+.container-fluid a {
+  color: black;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: medium;
+}
+.content-image {
+  object-fit: contain;
+  object-position: center;
+  width: 4rem;  
+  height: 4rem;
+  /* margin-top: 0.5rem; */
+}
+
+.content-image-phone{
+  object-fit: contain;
+  object-position: center;
+  width: 2rem;  
+  height: 2rem;
+  /* margin-top: 0.5rem; */
+}
+
+.language-selector {
+  border-radius: 0.3rem;
+  background-color: #f1eded;
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 0.5rem 1rem;
+  border: 1px solid #656161;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 991px) {
+  .language-selector {
+    white-space: initial;
+    margin-top: 0.25px;
+  }
+}
+
+
+
+.language-icon {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  width: 20px;
+}
+
+.notification-icon {
+  aspect-ratio: 1.31;
+  object-fit: contain;
+  object-position: center;
+  width: 34px;
+  align-self: start;
+}
+
+.welcome-text {
+  font-size: 17px;
+  font-weight: 500;
+  flex-basis: auto;
+  margin: auto 0;
+}
+
+.user-avatar-container {
+  display: flex;
+  align-items: start;
+}
+
+.user-avatar {
+  aspect-ratio: 1.27;
+  object-fit: contain;
+  object-position: center;
+  width: 34px;
+  z-index: 10;
+  margin-left: 0px;
+  margin-top: 15px;
+}
+
+.status-indicator {
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center;
+  width: 30px;
+  margin-top: 6px;
+}
+
+.nav-item-out{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+}
+
+.left-icon{
+  display: flex;
+  justify-content: space-between;
 }
