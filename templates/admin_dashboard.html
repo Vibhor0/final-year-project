@@ -12,6 +12,21 @@
     .graph-section {
       margin-bottom: 30px;
     }
+
+    /* Added styling for the new graph container */
+    .graph-container-wrapper {
+      background-color: #f8f9fa; /* Light background for visibility */
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,.1);
+      margin-top: 20px;
+    }
+    /* Added style to constrain the height of the canvas container */
+    .graph-section canvas {
+      max-height: 400px; /* Adjust this value as needed */
+      width: 100% !important; /* Ensure canvas takes full width of its parent */
+      height: auto !important; /* Allow height to adjust automatically based on aspect ratio */
+    }
   </style>
 </head>
 
@@ -43,32 +58,21 @@
         </ul>
       </div>
       <ul class="navbar-nav ms-auto">
-
-        <li>
-          <span class="language-text">English</span>
-          <img loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/af624e064cb55ab1cdf69bbe6422929a63a513da78f61a4624eaee1407fbde44?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
-            class="language-icon" alt="Language selection icon" />
-          <img loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/7928c972bb6e1037556ab7ab515e0a559e351033285b3b5d48a3a023ce0ed5b3?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
-            class="notification-icon" alt="Notification icon" />
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Welcome, {{ current_user.username }}!</a>
-        </li>
-        <li>
+        <li class="nav-item-out">
           <img loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/99921d6dd55c3f3fb1416f7f306139ff0a761b5ceb085b59577bbc93faf1e710?placeholderIfAbsent=true&apiKey=8d4d4704581247888cfc59a175a97186"
-            class="user-avatar" alt="User avatar" onmouseenter="showLogoutButton()" onmouseleave="hideLogoutButton()"
-            onclick="logout()" ; />
+            class="user-avatar" alt="User avatar" />
 
+          {% if current_user.is_authenticated %}
+            <span>Welcome, {{ current_user.username }}!</span>
+            <a data-i18n="logout" class="nav-link btn text-white mr-10 ml-10" style="background-color: red; " href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+          
+        
         </li>
-        <li class="nav-item">
-          <a id="logout-button" class="nav-link btn btn-danger text-white mr-10 ml-10" href="{{ url_for('logout') }}"
-            style="visibility: hidden;">
-            Logout
-          </a>
-        </li>
+         
+
+        
 
       </ul>
 
@@ -134,6 +138,7 @@
                   <th>Status</th>
                   <th>User ID</th>
                   <th>Assigned Employee ID</th>
+                  <th>Urgency</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -159,6 +164,7 @@
                   <td>{{ complaint.status }}</td>
                   <td>{{ complaint.user_id }}</td>
                   <td>{{ complaint.assigned_employee_id }}</td>
+                  <td>{{ complaint.urgency }}</td>
                   <td>
                     {% if complaint.feedback %}
 
@@ -170,7 +176,6 @@
                     </button>
 
 
-                    <!-- Modal -->
                     <div class="modal fade" id="feedbackModal{{ complaint.id }}" tabindex="-1"
                       aria-labelledby="feedbackModalLabel{{ complaint.id }}" aria-hidden="true">
                       <div class="modal-dialog">
@@ -204,15 +209,9 @@
           </div>
 
 
-          <!-- Statistics Section  -->
           <div class="container2 mt-5">
             <h2>Statistics</h2>
             <div class="row ml-2 mr-2">
-              <div class="col-md-4 graph-section mb-3 ">
-                <h3>Feedback Trend</h3>
-                <canvas id="feedbackTrendChart"></canvas>
-              </div>
-
               <div class="col-md-4 stats-section mb-3">
                 <h3>Feedback Sentiments</h3>
                 <ul class="list-group">
@@ -225,7 +224,20 @@
                 <h3>Average User Rating</h3>
                 <p class="lead">{{ avg_rating }}</p>
               </div>
-
+              <div class="col-md-12 graph-container-wrapper">
+                <div class="row">
+                  <div class="col-md-12 graph-section mb-3">
+                    <h3>Feedback Trend</h3>
+                    <canvas id="feedbackTrendChart"></canvas>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 graph-section mb-3">
+                    <h3>Feedback Rating Distribution</h3>
+                    <canvas id="feedbackRatingChart"></canvas>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -234,29 +246,95 @@
 
   </main>
 
-  <!-- Chart.js Script -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // const trendData = {{ trend_data| safe }};
-    const ctx = document.getElementById('feedbackTrendChart').getContext('2d');
+    // Parse the trendData from the Jinja2 context
+    const trendData = JSON.parse('{{ trend_data | safe }}');
 
-    new Chart(ctx, {
+    // Feedback Trend Chart
+    const ctxTrend = document.getElementById('feedbackTrendChart').getContext('2d');
+    new Chart(ctxTrend, {
       type: 'line',
       data: {
         labels: trendData.labels,
         datasets: [{
-          label: 'Feedback Count',
+          label: 'Number of Feedbacks',
           data: trendData.data,
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderWidth: 2,
-          fill: true,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1,
+          fill: false
         }]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: true, // Changed to true
         scales: {
-          x: { title: { display: true, text: 'Date' } },
-          y: { title: { display: true, text: 'Feedback Count' } }
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Feedback Rating Distribution Chart
+    // You need to pass the rating data from your Python backend as well,
+    // similar to how trend_data is passed.
+    // For now, I'm providing a placeholder that calculates from the table,
+    // but fetching from the backend is more robust.
+    
+    // In app.py, you would calculate this:
+    /*
+    rating_counts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+    for feedback in feedbacks:
+        if feedback.rating is not None and 1 <= feedback.rating <= 5:
+            rating_counts[feedback.rating] += 1
+    # Then pass rating_counts to the template as a JSON string
+    return render_template('admin_dashboard.html', ..., rating_counts=json.dumps(rating_counts))
+    */
+
+    // Placeholder data for rating counts (ideally passed from backend)
+    // To get actual data, you would iterate through complaints and their feedback
+    // in your Python backend and pass the aggregated rating counts.
+    const feedbackRatings = [
+      {% for complaint in complaints %}
+        {% if complaint.feedback and complaint.feedback.rating is not none %}
+          {{ complaint.feedback.rating }},
+        {% endif %}
+      {% endfor %}
+    ];
+
+    let ratingCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+    feedbackRatings.forEach(rating => {
+      if (rating >= 1 && rating <= 5) {
+        ratingCounts[rating]++;
+      }
+    });
+
+    const ratingLabels = Object.keys(ratingCounts);
+    const ratingData = Object.values(ratingCounts);
+
+    const ctxRating = document.getElementById('feedbackRatingChart').getContext('2d');
+    new Chart(ctxRating, {
+      type: 'bar',
+      data: {
+        labels: ratingLabels,
+        datasets: [{
+          label: 'Number of Feedbacks per Rating',
+          data: ratingData,
+          backgroundColor: 'rgba(153, 102, 255, 0.6)',
+          borderColor: 'rgba(153, 102, 255, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true, // Changed to true
+        scales: {
+          y: {
+            beginAtZero: true,
+            precision: 0
+          }
         }
       }
     });
@@ -293,7 +371,6 @@
 
   </script>
 
-  <!-- JS Libraries -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
